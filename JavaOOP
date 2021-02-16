@@ -48,3 +48,31 @@ public class CardinalDirections {
             }
         }//END MAIN METHOD
     }
+
+/*Write a method that takes in three integers ranged from 0 to 255
+and then prints out the converted values on a scale from 0.0-1.0
+Write a main method that reads three values in from the user and calls the method.
+The first three lines of the output below are from main.
+The last line is from the function.
+*/
+
+import java.util.Scanner;
+
+public class RGBcolorprogram {
+
+    public static void convertToScale(int red, int green, int blue) {
+        System.out.printf("New color is red=%.6f, green=%.6f, blue=%.6f\n", red / 255.0, green / 255.0, blue / 255.0);
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter a red value (0-255): ");
+        int red = in.nextInt();
+        System.out.print("Enter a green value (0-255): ");
+        int green = in.nextInt();
+        System.out.print("Enter a blue value (0-255): ");
+        int blue = in.nextInt();
+
+        convertToScale(red, green, blue);
+    }
+}

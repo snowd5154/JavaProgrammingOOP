@@ -76,3 +76,43 @@ public class RGBcolorprogram {
         convertToScale(red, green, blue);
     }
 }
+
+/*Write a static method that takes a domain name as argument and returns
+the reverse domain (reverse the order of the strings between periods). For example,
+the reverse domain of cs.princeton.edu is edu.princeton.cs. This computation
+is useful for web log analysis.
+ */
+
+import java.util.Scanner;
+
+public class WebLogAnalysis {
+
+    public String reverseDomain(String url){
+        //the url is pitted based on "."
+        String[] domainSplit = url.split("\\.");
+        String domain = "";
+
+        //size of the array is calculated
+        int size = domainSplit.length;
+
+        //the last element of the array is saved in the variable domain
+        domain = domainSplit[size-1];
+
+        //for loop helps us to save rest of the elements of the array in variable domain which is separated by "."
+
+        for(int i=size-2; i>-1; i--) {
+            domain = domain + "." + domainSplit[i];
+            return domain;
+        }
+        public static void main(String[] args){
+            Scanner s = new Scanner(System.in);
+
+            //the url value is taken from the user
+            System.out.println("Enter your URL: ");
+            String url = (String) s.nextLine();
+            DomainName d = new DomainName();
+            String domain = d.reverseDomain(url);
+
+            System.out.println("The reverse of the domain is: "+domain);
+        }
+    }

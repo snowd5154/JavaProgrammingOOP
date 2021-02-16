@@ -1,0 +1,50 @@
+/*Write a program that takes a double value w from the command line, creates
+four Charge objects with charge value 1.0 that are each distance w in each of
+the four cardinal directions from (.5, .5), and prints the potential at (.25, .5)
+*/
+
+
+public class CardinalDirections {
+
+    public static String reverse(String str) {
+        //declare a local variable to keep the reverse string
+        String result = "";
+
+        //repeat loop
+        for (int i = str.length() - 1; i >= 0; i--) {
+            result = result + str.charAt(i);
+        }
+        //return the reverse string
+        return result;
+    }//end of reverse method
+
+    /*The ReverseTest class implementation will demonstrate a static method named reverse
+    that accepts a string as an argument and then returns a string
+    contains the same characters of the argument in reverse order.
+     */
+
+        public class ReverseTest{
+            //reverse method implementation
+        public static String reverse(String str) {
+            //declare a local variable
+            String result = "";
+            //repeat the loop
+            for (int = str.length()-1; i >= 0; i--)
+            {
+                result = result + str.charAt(i);
+            }
+            //return the reverse string
+            return result;
+        }
+
+        //Main Method
+        public static void main(String[] args){
+            String str = "Reverse a String";
+            //call the reverse method to get the reverse
+            //String of the original string
+            String revStr = reverse(str);
+            System.out.println("Original String: " + str);
+            System.out.println("Reverse String: " + revStr);
+            }
+        }//END MAIN METHOD
+    }

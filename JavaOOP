@@ -116,3 +116,63 @@ public class WebLogAnalysis {
             System.out.println("The reverse of the domain is: "+domain);
         }
     }
+
+/*Write a program Merge that takes a delimiter string followed by an arbitrary
+number of file names as command line arguments, concatenates the corresponding
+lines of each file, separated by the delimiter, and then writes the result to standard
+output, thus performing the opposite operation from Split
+*/
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class MergeStockMarketData {
+    public static void main(String[] args) {
+        String delimiter = args[0];
+        // ignoring delimiter
+        int numberOfFiles = args.length - 1;
+
+        // Create array of Scanner to read the files
+        Scanner[] fileReaders = new Scanner[numberOfFiles];
+
+        // iterate till number of files
+        for (int i = 0; i < fileReaders.length; i++) {
+            try {
+                // create an scanner object
+                fileReaders[i] = new Scanner(new File(args[i + 1]));
+            } catch (FileNotFoundException e) {
+                // if not found
+                System.out.println(e.getLocalizedMessage());
+            }
+        }
+
+        boolean hasLine = false;
+        do {
+            hasLine = false;
+            String mergeLine = "";
+            // iterate all the files to get next lines
+            for (int i = 0; i < fileReaders.length; i++) {
+                // if the file has line, read it
+                if(fileReaders[i] != null && fileReaders[i].hasNextLine()) {
+                    mergeLine += fileReaders[i].nextLine();
+                }
+                // do not add the delimiter after last file line
+                if(i != fileReaders.length -1) {
+                    mergeLine += delimiter;
+                }
+            }
+
+            // Print the mergedLine
+            System.out.println(mergeLine);
+
+            // iterate till number of files
+            for (int i = 0; i < fileReaders.length; i++) {
+                if(fileReaders[i] != null && fileReaders[i].hasNextLine()) {
+                    hasLine = true;
+                    break;
+                }
+            }
+        }while(hasLine);
+    }
+}//This code needs three text files to properly function

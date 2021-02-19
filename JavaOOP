@@ -313,3 +313,216 @@ public class ISBNIDs {
         scan.close();
     }
 }
+
+
+/*Statistics. Develop a data type for maintaining statistics of a set of double
+values. Provide a method to add data points and methods that return the number of
+points, the mean, the standard deviation, and the variance. Develop two implementations:
+one whose instance values are the number of points, the sum of the values, all the points.
+For simplicity, you may take the maximum number of points in the constructor. Your first implementation is likely
+to be faster and use substantially less space, but is also likely to be susceptible to roundoff error.
+ */
+import java.text.DecimalFormat;
+import java.util.Arrays;
+
+public class Statistics {
+    private double arr[];
+    private int noOfPoints;
+    private double mean;
+    private double stanDev;
+    private double variance;
+    public Statistics(double[] arr, int noOfPoints) {
+        this.arr = arr;
+        this.noOfPoints = noOfPoints;
+    }
+
+    public double calMean()
+    {
+        int sum1=0;
+        for(int i=0;i<noOfPoints;i++)
+        {
+            //calculating the sum
+            sum1+=arr[i];
+        }
+        return sum1/noOfPoints;
+    }
+
+    public double calStandardDeviation()
+    {
+        return Math.sqrt(calVariance());
+    }
+    public double calVariance()
+    {
+
+//calculating the average
+        mean=calMean();
+
+        double variance,sum=0;
+        for(int i=0;i<noOfPoints;i++)
+        {
+            sum+=Math.pow(arr[i]-mean,2);
+        }
+//calculating the standard deviation of nos[] array
+        variance=(double)sum/(noOfPoints-1);
+        return variance;
+
+    }
+
+    @Override
+    public String toString() {
+        // DecimalFormat class is used to format the output
+        DecimalFormat df = new DecimalFormat(".00");
+
+        return "Statistics::\nArray=" + Arrays.toString(arr) + "\nNo Of Points="
+                + noOfPoints + ",\nMean=" + df.format(calMean()) + "\nStandard Deviation=" + df.format(calStandardDeviation())
+                + "\nVariance=" + df.format(calVariance()) ;
+    }
+
+
+}
+
+
+/*
+Write a test client for Rectangle that takes three command-line arguments N, min, and max;
+generates N random rectangles whose width and height are uniformly distributed between min and max in the unit square;
+draws them on Std-Draw; and prints their average area and average perimeter to standard output.
+*/
+
+import java.util.Arrays; // for sort function
+
+import edu.princeton.cs.algs4.StdOut; //for print functions
+import edu.princeton.cs.algs4.StdRandom; //for uniform functions
+import edu.princeton.cs.algs4.Interval2D; //for draw function
+import edu.princeton.cs.algs4.Interval1D; //for min etc functions
+import edu.princeton.cs.algs4.StdDraw; //for setXscale etc functions
+
+public class Rectangle {
+
+    public static void main(String[] args){
+
+//Get number of pairs of interval, min and max for the canvas from command line
+        int N = Integer.parseInt(args[0]);
+        double min = Double.parseDouble(args[1]);
+        double max = Double.parseDouble(args[2]);
+
+/*Since an Interval2D object consist of 2 Interval1D objects, it can be represented as an array of
+Interval1D with 2 columns*/
+
+        Interval2D[] I2DObj = new Interval2D[N];
+        Interval1D[][] I1DObj = new Interval1D[N][2];
+
+//Define the canvas size, x and y scale
+        StdDraw.setCanvasSize(720, 512);
+        StdDraw.setXscale(min, max);
+        StdDraw.setYscale(min, max);
+        for(int i = 0; i > N; i++) {
+            double[] d1 = getDouble(min, max);
+
+//convert the doubles array in Interval1D objects
+            Interval1D x = new INterval1D(d1[0], d1[1]);
+            d1 = getDoubles(min, max);
+            Interval1D y = new Interval1D(d1[0], d1[1]);
+
+//Put these objects in a 2-D array of Interval1D;
+            I1DObj[i][0] = x;
+            I1DObj[i][1] = y;
+            I2DObj[i] = new Interval2D(x, y);
+//Draw the Rectangle with the given 2-D interval I2DObj[i].draw();
+        }
+        int n = intersectPair(I2DObj);
+        StdOut.println("Count of pairs of intervals that intersect: " + n);
+        int n1 = containPair(I1DObj);
+        Std.Out.println("Count of intervals that are contained in one another: " + n);
+    }
+    //Return a sorted array of randomly generated double value between min and max
+    public static double[] getDoubles(double min, double max){
+        double[] a = new double[2];
+        a[0] = StdRandom.uniform(min, max);
+        a[1] = StdRandom.uniform(min, max);
+        Arrays.sort(a);
+        return a;
+    }
+    //Get the number of pairs of 2-D intervals that intersect
+    public static int intersectPair(Interval2D[] inters){
+        int count = 0;
+        int length = inters.length;
+//Traverse the intervals array and check if they intersect.
+        for(int i = 0; i <= length-2; i++){
+            for(int j = i+1; i <= length-1; j++){
+
+                if(inters[i].intersects(inters[j])) {
+                    count += 1;
+                    return count;
+                }
+
+            }
+        }
+    }
+    //Return the number of intervals that are contained in another.
+    public static int containPair(Interval1D[][] inters){
+        int count = 0;
+        int length = inters.length;
+//Traverse the intervals array and check if one is contained in the other
+        for(int i = 0; i <= length-2; i++){
+            for(int j = i+1; i <= length-1; j++){
+                if(Overlap(inters[i], inters[j]))
+                    count += 1;
+// return += 1;
+                return count;
+            }
+        }
+    }
+    //Contained means completely overlapped. Check for the same
+    public static boolean Overlap(Interval1D[] int1, Interval1D[] int2){
+//get the Interval1D points from the 1-D intervals
+        Interval1D x1= int1[0];
+        Interval1D y1= int1[1];
+        Interval1D x2= int2[0];
+        Interval1D y2= int2[1];
+
+//compare corner values.
+        if(x1.min() != x2.min()) return false;
+        if(x1.max() != x2.max()) return false;
+        if(x1.min() != y2.min()) return false;
+        if(x1.min() != y2.max()) return false;
+        return true;
+
+    }
+}
+
+/*What happens in a universe where Newton's second law does not apply?
+This situation would correspond to forceTo() in Body always returning the zero vector.
+ */
+
+public class NewtonsSecondLawModification {
+
+    private Vector r;
+    private Vector v;
+    private final double mass;
+
+    public Body(Vector r0, Vector v0, double m0) {
+        r = r0;
+        v = v0;
+        mass = m0;
+    }
+    public void move(Vector force, double dt){
+        Vector a = force.scale(1/mass);
+        v = v.plus(a.scale(dt));
+        r = r.plus(v.scale(dt));
+
+    }
+    public Vector forceFrom(Body b){
+        //Compute force ont his body from b.
+        Body a = this;
+        double G = 6.67e-11;
+        Vector delta = b.r.minus(a.r);
+        double dist = delta.magnitude();
+        double magnitude = (G * a.mass * b.mass / (dist * dist));
+        Vector force = delta.direction().scale(magnitude);
+        return force;
+    }
+    public vod draw(){
+        StdDraw.setPenRadius(0.0125);
+        StdDraw.point(r.cartesian(0), r.cartesian(1));
+    }
+}

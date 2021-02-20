@@ -526,3 +526,123 @@ public class NewtonsSecondLawModification {
         StdDraw.point(r.cartesian(0), r.cartesian(1));
     }
 }
+
+/*Implement a data type Rational for rational numbers that supports
+addition, subtraction, multiplication, and division
+Use Euclid.gcd() to ensure that the numerator and denominator never
+have any common factors. Include a test client that exercises methods.
+*/
+
+public class Rational
+{
+    private int numerator, denominator;
+
+    public Rational (int numer, int denom)
+    {
+        if (denom == 0)
+            denom = 1;
+
+        if (denom < 0)
+        {
+            numer = numer * -1;
+            denom = denom * -1;
+        }
+
+        numerator = numer;
+        denominator = denom;
+
+        reduce();
+    }
+
+    public int get_Numerator ()
+    {
+        return numerator;
+    }
+
+    public int get_Denominator ()
+    {
+        return denominator;
+    }
+
+    public Rational reciprocal ()
+    {
+        return new Rational (denominator, numerator);
+    }
+
+
+    public Rational plus (Rational op2)
+    {
+        int commonDenominator = denominator * op2.get_Denominator();
+        int numerator1 = numerator * op2.get_Denominator();
+        int numerator2 = op2.get_Numerator() * denominator;
+        int sum = numerator1 + numerator2;
+
+        return new Rational (sum, commonDenominator);
+    }
+
+    public Rational minus (Rational op2)
+    {
+        int commonDenominator = denominator * op2.get_Denominator();
+        int numerator1 = numerator * op2.get_Denominator();
+        int numerator2 = op2.get_Numerator() * denominator;
+        int difference = numerator1 - numerator2;
+
+        return new Rational (difference, commonDenominator);
+    }
+
+    public Rational times (Rational op2)
+    {
+        int numer = numerator * op2.get_Numerator();
+        int denom = denominator * op2.get_Denominator();
+
+        return new Rational (numer, denom);
+    }
+
+    public Rational divides (Rational op2)
+    {
+        return times (op2.reciprocal());
+    }
+
+    public boolean equals (Rational op2)
+    {
+        return ( numerator == op2.get_Numerator() &&
+                denominator == op2.get_Denominator() );
+    }
+
+    public String toString ()
+    {
+        String result;
+
+        if (numerator == 0)
+            result = "0";
+        else
+        if (denominator == 1)
+            result = numerator + "";
+        else
+            result = numerator + "/" + denominator;
+
+        return result;
+    }
+
+    private void reduce ()
+    {
+        if (numerator != 0)
+        {
+            int common = gcd (Math.abs(numerator), denominator);
+
+            numerator = numerator / common;
+            denominator = denominator / common;
+        }
+    }
+
+    private int gcd (int num1, int num2)
+    {
+        while (num1 != num2)
+            if (num1 > num2)
+                num1 = num1 - num2;
+            else
+                num2 = num2 - num1;
+
+        return num1;
+    }
+}
